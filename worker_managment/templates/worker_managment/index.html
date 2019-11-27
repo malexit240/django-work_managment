@@ -1,0 +1,21 @@
+<head>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class='container'>
+
+        {% if companies %}
+            <ul class="list-group list-group-flush">
+                {% for company in companies %}
+                    <li class="list-group-item">
+                        <a href={% url 'company-details' company.id%}>{{company.name}}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p> Companies were not added</p>
+        {% endif %}
+
+    </div>
+</body>

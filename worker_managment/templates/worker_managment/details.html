@@ -1,0 +1,32 @@
+<head>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class='container'>
+
+        <h1>{{company.name}}</h1>
+
+        {% if works %}
+            <ul class="list-group list-group-flush">
+                {% for work in works %}
+                    <li class="list-group-item">
+                        <p href=''>{{work.name}}</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                            {% for workplace in work.workplaces %}
+                                <span class='row'>
+                                    <p class='col-3'> {{workplace.name}}</p>
+                                    <p class='col-2'> {{workplace.worker.name}}</p>
+                                </span>
+                            {% endfor %}
+                            </li>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p> Works were not added</p>
+        {% endif %}
+    </div>
+</body>
