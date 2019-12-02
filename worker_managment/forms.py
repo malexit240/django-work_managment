@@ -1,11 +1,12 @@
-from django.forms import forms, ModelForm
+import django.forms as fm
 
 from .models import WorkTime
 
 
-class AddWorkTimeForm(ModelForm):
+class AddWorkTimeForm(fm.ModelForm):
     class Meta:
         model = WorkTime
         fields = ['date_start', 'date_end', 'status']
-
-    def add_worktime():
+        widgets = {
+            'date_start':fm.SelectDateWidget()
+            }

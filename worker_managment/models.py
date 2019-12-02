@@ -3,6 +3,7 @@
 from django.db import models as m
 
 
+
 class NameAndStrMixin(m.Model):
     """Mixin that adds name field to model and overrides __str__ method to return name as result"""
     name = m.CharField(max_length=64)
@@ -28,10 +29,20 @@ class Work(NameAndStrMixin):
     """Work model"""
     company = m.ForeignKey(Company, on_delete=m.CASCADE)
 
+class History(m.Manager):
+    def __init__(self):
+        pass
+
+    def get_queryset(self):
+        return super().get_queryset().all()
+
 
 class Worker(NameAndStrMixin):
     """Worker model"""
-    pass
+    def get_worktimes(self):
+        workplaces = list(self.workplace_set.all())
+        workplaces_with_wt = [wt.workplace for wt in self.worktime_set.all()]
+        return list(set(workplaces) | set(workplaces_with_wt))
 
 
 class Workplace(NameAndStrMixin):
@@ -50,4 +61,7 @@ class WorkTime(m.Model):
     status = m.IntegerField(default=1,
                             choices=[(1, 'New'), (2, 'Approved'), (3, 'Cancelled')])
     worker = m.ForeignKey(Worker, on_delete=m.CASCADE)
-    workplace = m.OneToOneField(Workplace, on_delete=m.SET_NULL, null=True)
+    workplace = m.ForeignKey(Workplace, on_delete=m.SET_NULL, null=True)
+
+
+#DJANGO DATE_TIME_INPUT_FORMATS
