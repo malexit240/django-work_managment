@@ -1,0 +1,24 @@
+{% extends 'worker_managment/base.html' %}
+{% block title %} 
+    Worker {{ worker.name}}
+{% endblock title %}
+
+{% block body %}
+    <h1>{{worker.name}}</h1>
+    <ul class="list-group list-group-flush">
+        {% for workplace in workplaces %}
+            <li class="list-group-item">
+                <span class='row'>
+                    <p class='col-4'>{{workplace.name}}</p>
+                    {% if workplace.worktime %}
+                        <p class='col-3'>{{workplace.worktime.date_start}}</p>
+                        <p class='col-3'>{{workplace.worktime.date_end}}</p>
+                    {% else %}
+                        <p class='col-6'><a href={% url 'add-worktime' worker.id workplace.id %}>Add work time</a></p>
+                    {% endif %} 
+                </span>
+                
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

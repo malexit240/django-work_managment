@@ -15,10 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from worker_managment.views import index, details
+from django.views.generic import ListView
+
+from worker_managment.views import index, CompanyDetails, WorkersList, WorkerDetails, AddWorkTime
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path('details/<int:company_id>/', details, name='company-details')
+    path('details/<int:pk>/',
+         CompanyDetails.as_view(), name='company-details'),
+    path('workers/', WorkersList.as_view(), name='workers'),
+    path('workers/<int:pk>', WorkerDetails.as_view(), name='worker-details'),
+    path('worktime/<int:worker_id>/<int:workplace_id>',
+         AddWorkTime.as_view(), name='add-worktime')
+
 ]

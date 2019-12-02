@@ -29,12 +29,25 @@ class Work(NameAndStrMixin):
     company = m.ForeignKey(Company, on_delete=m.CASCADE)
 
 
+class Worker(NameAndStrMixin):
+    """Worker model"""
+    pass
+
+
 class Workplace(NameAndStrMixin):
     """Workplace model"""
     work = m.ForeignKey(Work, on_delete=m.CASCADE)
+    worker = m.ForeignKey(Worker, on_delete=m.SET_NULL,
+                          null=True, default=None, blank=True)
+    status = m.IntegerField(default=1,
+                            choices=[(1, 'New'), (2, 'Approved'), (3, 'Cancelled'), (4, 'Finished')])
 
 
-class Worker(NameAndStrMixin):
-    """Worker model"""
-    workplace = m.OneToOneField(
-        Workplace, on_delete=m.SET_NULL, null=True, default=None, blank=True)
+class WorkTime(m.Model):
+    """WorkTime model"""
+    date_start = m.DateTimeField(null=True, blank=True, default=None)
+    date_end = m.DateTimeField(null=True, blank=True, default=None)
+    status = m.IntegerField(default=1,
+                            choices=[(1, 'New'), (2, 'Approved'), (3, 'Cancelled')])
+    worker = m.ForeignKey(Worker, on_delete=m.CASCADE)
+    workplace = m.OneToOneField(Workplace, on_delete=m.SET_NULL, null=True)
