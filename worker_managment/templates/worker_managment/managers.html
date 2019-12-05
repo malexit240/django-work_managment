@@ -1,19 +1,20 @@
 {% extends 'worker_managment/base.html' %}
 
 {% block title %}
-Workers
+Managers in {{company.name}}
 {% endblock title %}
 
 {% block body %}
-        {% if workers %}
+    <h1>{{company.name}}</h1>
+        {% if managers %}
             <ul class="list-group list-group-flush">
-                {% for worker in workers %}
+                {% for manager in managers %}
                     <li class="list-group-item">
-                        <a href={% url 'worker-details' worker.id%}>{{worker.name}}</a>
+                        {{manager.name}}
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p> Workers were not added</p>
+            <p> Managers were not added</p>
         {% endif %}
 {% endblock body %}

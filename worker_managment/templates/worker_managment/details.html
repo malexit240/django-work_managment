@@ -4,17 +4,24 @@
 {% endblock title %}
 {% block body %}
     <h1>{{company.name}}</h1>
+    <p><a href={% url 'managers-in-company' company.id %}>Managers</a></p>
     {% if works %}
         <ul class="list-group list-group-flush">
             {% for work in works %}
                 <li class="list-group-item">
-                    <p href=''>{{work.name}}</p>
+                    <p> <a href={% url 'work-details' company.id work.id %}>{{work.name}}</a> </p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                        {% for workplace in work.workplaces %}
+                        {% for workplace in work.workplace_set.all %}
                             <span class='row'>
-                                <p class='col-3'><a href='/'>{{workplace.name}}</a> </p>
-                                <p class='col-2'><a href={% url 'worker-details' workplace.worker.id %}> {{workplace.worker.name}}</a></p>
+                                <p class='col-3'><a href={% url 'workplace-details' company.pk work.id workplace.pk %}>{{workplace.name}}</a> </p>
+                                <p class='col-2'>
+                                    {% if workplace.worker %}
+                                        <a href={% url 'worker-details' workplace.worker_id %}> {{workplace.worker.name}}</a>
+                                    {% else %}
+                                        Dont hire
+                                    {% endif %}
+                                </p>
                             </span>
                         {% endfor %}
                         </li>

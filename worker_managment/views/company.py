@@ -24,12 +24,12 @@ class CompanyDetails(DetailView):
         context = super().get_context_data(**kwargs)
         company = object
 
-        works = [{
-            'name': work.name,
-            'workplaces': work.workplace_set.all(), }
-            for work in company.work_set.all()]
+        # works = [{
+        #     'name': work.name,
+        #     'workplaces': work.workplace_set.all(), }
+        #     for work in company.work_set.all()]
 
         context['company'] = company
-        context['works'] = works
+        context['works'] = company.work_set.all()
 
         return context

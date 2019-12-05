@@ -1,0 +1,19 @@
+{% extends 'worker_managment/base.html' %}
+
+{% block title %}
+{{workplace.name}}
+{% endblock title %}
+
+{% block body %}
+    <h1>{{workplace.name}}</h1>
+        <label>Worker:</label>
+        {% if workplace.worker %}
+            {{workplace.worker.name}}
+        {% endif %}
+
+        <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type='submit'></input>
+        </form>
+{% endblock body %}
