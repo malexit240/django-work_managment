@@ -74,7 +74,7 @@ class Workplace(NameAndStrMixin, StatusMixin):
               (2, 'Cancelled'),
               (3, 'Finished')]
 
-    status = m.IntegerField(default=1,
+    status = m.IntegerField(default=0,
                             choices=STATUS)
 
 
@@ -91,7 +91,7 @@ class WorkTime(m.Model, StatusMixin):
               (1, 'Approved'),
               (2, 'Cancelled')]
 
-    status = m.IntegerField(default=1, choices=STATUS)
+    status = m.IntegerField(default=0, choices=STATUS)
 
     worker = m.ForeignKey(Worker, on_delete=m.CASCADE)
     workplace = m.ForeignKey(Workplace, on_delete=m.SET_NULL, null=True)
