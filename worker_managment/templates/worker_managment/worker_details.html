@@ -14,7 +14,7 @@
                         <p class='col-3'>{{workplace.worktime.date_start}}</p>
                         <p class='col-3'>{{workplace.worktime.date_end}}</p>
                     {% else %}
-                        <p class='col-6'><a href={% url 'add-worktime' worker.id workplace.id %}>Add work time</a></p>
+                        <p class='col-6'><a href={% url 'wmanagment:add-worktime' worker.id workplace.id %}>Add work time</a></p>
                     {% endif %} 
                 </span>
                 

@@ -1,0 +1,19 @@
+{% extends 'worker_managment/base.html' %}
+
+{% block title %} 
+    Companies
+{% endblock title %}
+
+{% block body %}
+    {% if companies %}
+        <ul class="list-group list-group-flush">
+            {% for company in companies %}
+                <li class="list-group-item">
+                    <a href={% url 'wmanagment:company-details' company.id%}>{{company.name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p> Companies were not added</p>
+    {% endif %}
+{% endblock body %}

@@ -1,12 +1,16 @@
+"""this module contains urls for wmanagment app"""
+
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import index, CompanyDetails, WorkersList, WorkerDetails, AddWorkTime, ManagersList, WorkList, WorkDetail, WorkplaceDetail
+from .views import *
+
+app_name = 'wmanagment'
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='worker_managment/wmanagment_index.html', ),
-         name='wmanagment-root'),
-    path('company/', index, name='company-list'),
+    path('', TemplateView.as_view(template_name='worker_managment/index.html', ),
+         name='index'),
+    path('company/', CompanyList.as_view(), name='company-list'),
     path('company/<int:pk>/',
          CompanyDetails.as_view(), name='company-details'),
 
@@ -20,7 +24,7 @@ urlpatterns = [
     path('company/<int:company_id>/work/<int:work_id>/workplace/<int:pk>',
          WorkplaceDetail.as_view(), name='workplace-details'),
 
-    path('workers/', WorkersList.as_view(), name='workers'),
+    path('workers/', WorkersList.as_view(), name='worker-list'),
     path('workers/<int:pk>', WorkerDetails.as_view(), name='worker-details'),
 
     path('worktime/<int:worker_id>/<int:workplace_id>',

@@ -10,7 +10,7 @@ Works in {{company.name}}
             <ul class="list-group list-group-flush">
                 {% for work in works %}
                     <li class="list-group-item">
-                        <a href={% url 'work-details' company.pk work.pk %}>{{work.name}}</a>
+                        <a href={% url 'wmanagment:work-details' company.pk work.pk %}>{{work.name}}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -20,6 +20,6 @@ Works in {{company.name}}
         <form method="post">
         {% csrf_token %}
         {{form}}
-        <input type='submit'></input>
+        <input class='btn btn-info' type='submit'></input>
         </form>
 {% endblock body %}

@@ -1,3 +1,5 @@
+"""this module contains all forms for wmanagment"""
+
 import django.forms as fm
 
 from .models import WorkTime, Work, Workplace

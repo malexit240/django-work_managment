@@ -9,7 +9,7 @@ Workers
             <ul class="list-group list-group-flush">
                 {% for worker in workers %}
                     <li class="list-group-item">
-                        <a href={% url 'worker-details' worker.id%}>{{worker.name}}</a>
+                        <a href={% url 'wmanagment:worker-details' worker.id%}>{{worker.name}}</a>
                     </li>
                 {% endfor %}
             </ul>

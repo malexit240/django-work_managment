@@ -1,4 +1,6 @@
+""" contains import all from submodules"""
+
 from .company import *
-from .workers import *
-from .managers import *
-from .works import *
+from .worker import *
+from .manager import *
+from .work import *

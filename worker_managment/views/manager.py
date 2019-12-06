@@ -1,12 +1,13 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, reverse, redirect, reverse
-from django.views.generic import ListView, DetailView, FormView
+"""this module contains Manager views"""
 
-from worker_managment.models import Company, Manager
+from django.views.generic import DetailView
+
+from worker_managment.models import Company
 
 
 class ManagersList(DetailView):
+    """renders list of managers in same company"""
+
     template_name = 'worker_managment/managers.html'
     model = Company
 

@@ -4,20 +4,20 @@
 {% endblock title %}
 {% block body %}
     <h1>{{company.name}}</h1>
-    <p><a href={% url 'managers-in-company' company.id %}>Managers</a></p>
+    <p><a href={% url 'wmanagment:managers-in-company' company.id %}>Managers</a></p>
     {% if works %}
         <ul class="list-group list-group-flush">
             {% for work in works %}
                 <li class="list-group-item">
-                    <p> <a href={% url 'work-details' company.id work.id %}>{{work.name}}</a> </p>
+                    <p> <a href={% url 'wmanagment:work-details' company.id work.id %}>{{work.name}}</a> </p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                         {% for workplace in work.workplace_set.all %}
                             <span class='row'>
-                                <p class='col-3'><a href={% url 'workplace-details' company.pk work.id workplace.pk %}>{{workplace.name}}</a> </p>
+                                <p class='col-3'><a href={% url 'wmanagment:workplace-details' company.pk work.id workplace.pk %}>{{workplace.name}}</a> </p>
                                 <p class='col-2'>
                                     {% if workplace.worker %}
-                                        <a href={% url 'worker-details' workplace.worker_id %}> {{workplace.worker.name}}</a>
+                                        <a href={% url 'wmanagment:worker-details' workplace.worker_id %}> {{workplace.worker.name}}</a>
                                     {% else %}
                                         Dont hire
                                     {% endif %}
@@ -32,4 +32,6 @@
     {% else %}
         <p> Works were not added</p>
     {% endif %}
+    <br>
+    <p class='row justify-content-end'><a class='btn btn-info' href={% url 'wmanagment:works' company.id %}>Add work</a></p>
 {% endblock %}
