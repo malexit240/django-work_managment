@@ -3,6 +3,7 @@
 from django.views.generic import ListView, DetailView
 
 from worker_managment.models import Company
+import logging as log
 
 
 class CompanyList(ListView):

@@ -66,8 +66,8 @@ class WorkplaceDetail(FormView):
     form_class = HireWorkerForm
     model = Workplace
 
-    def get_context_data(self):
-        context = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['workplace'] = Workplace.objects.get(pk=self.kwargs['pk'])
         context['work'] = context['workplace'].work
 
@@ -84,7 +84,7 @@ class WorkplaceDetail(FormView):
 
         kwargs = {}
 
-        if work_id:
+        if worker_id:
             kwargs['worker_id'] = worker_id
         if status:
             kwargs['status'] = status
