@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from celery.schedules import crontab
+from kombu import Queue, Exchange, binding
+import celery.contrib
 import os
 
 import sentry_sdk
@@ -90,12 +93,6 @@ DATABASES = {
 }
 
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existion_loggers': False,
-# }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -133,3 +130,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+
+CELERY_QUEUES = (
+    Queue('high', Exchange('high'), routing_key='high'),
+    Queue('low', Exchange('low'), routing_key='low'),
+)
+
+CELERY_BEAT_SCHEDULE = {
+    'fill': {
+        'task': 'worker_managment.tasks.fill',
+        'schedule': 3.0,  # crontab(0, 0, day_of_week=1),
+
+    },
+}
+
+CELERY_ROUTES = {
+    'worker_managment.tasks.search_workers': {'queue': 'high'},
+    'worker_managment.tasks.fill': {'queue': 'low'},
+}

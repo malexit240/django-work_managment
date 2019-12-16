@@ -16,7 +16,16 @@ class NameAndStrMixin(m.Model):
         abstract = True
 
 
-class StatusMixin:
+class EmailMixin(m.Model):
+    """Mixin that adds email field to model"""
+
+    email = m.CharField(max_length=64)
+
+    class Meta:
+        abstract = True
+
+
+class StatusMixin(m.Model):
     """Mixin that adds get_readable_status method to class"""
 
     def get_readable_status(self):
@@ -32,7 +41,7 @@ class Company(NameAndStrMixin):
     pass
 
 
-class Manager(NameAndStrMixin):
+class Manager(NameAndStrMixin, EmailMixin):
     """Manager model"""
 
     company = m.ForeignKey(Company, on_delete=m.CASCADE)  # ???
@@ -42,9 +51,10 @@ class Work(NameAndStrMixin):
     """Work model"""
 
     company = m.ForeignKey(Company, on_delete=m.CASCADE)
+    time_limit = m.IntegerField(default=0)
 
 
-class Worker(NameAndStrMixin):
+class Worker(NameAndStrMixin, EmailMixin):
     """Worker model"""
 
     def get_workplaces(self):
@@ -78,12 +88,8 @@ class Workplace(NameAndStrMixin, StatusMixin):
                             choices=STATUS)
 
 
-class WorkTime(m.Model, StatusMixin):
+class WorkTime(StatusMixin):
     """WorkTime model"""
-
-    class Meta:
-        unique_together = (('worker', 'workplace'),)
-
     date_start = m.DateTimeField(null=True, blank=True, default=None)
     date_end = m.DateTimeField(null=True, blank=True, default=None)
 
@@ -95,3 +101,11 @@ class WorkTime(m.Model, StatusMixin):
 
     worker = m.ForeignKey(Worker, on_delete=m.CASCADE)
     workplace = m.ForeignKey(Workplace, on_delete=m.SET_NULL, null=True)
+
+
+class Statistics(m.Model):
+    worker = m.ForeignKey(Worker, on_delete=m.CASCADE)
+    hour_per_week = m.IntegerField()
+    workplace = m.ForeignKey(Workplace, on_delete=m.SET_NULL, null=True)
+    date_week_start = m.DateTimeField()
+    date_week_end = m.DateTimeField()
