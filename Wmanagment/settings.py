@@ -141,14 +141,19 @@ CELERY_QUEUES = (
 )
 
 CELERY_BEAT_SCHEDULE = {
-    'fill': {
-        'task': 'worker_managment.tasks.fill',
-        'schedule': 3.0,  # crontab(0, 0, day_of_week=1),
+    'fill_statistics_for_workers': {
+        'task': 'worker_managment.tasks.fill_statistics_for_workers',
+        'schedule': 2,  # crontab(0, 0, day_of_week=1),
 
     },
 }
 
 CELERY_ROUTES = {
     'worker_managment.tasks.search_workers': {'queue': 'high'},
-    'worker_managment.tasks.fill': {'queue': 'low'},
+    'worker_managment.tasks.send_email_about_overworking': {'queue': 'normal'},
+    'worker_managment.tasks.fill_statistics_for_workers': {'queue': 'low'},
 }
+
+
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = '3001'

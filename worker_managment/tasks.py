@@ -1,16 +1,20 @@
+"""this module contains celery tasks such as search new workers from another source, fill statistics about workers and sending alerts by email"""
+
 import datetime as dt
 from pytz import utc
 from requests import request
 import logging as log
 import smtplib
-from email.message import EmailMessage
+from django.core.mail import send_mass_mail
 
-#from Wmanagment.celery_app import app
+from Wmanagment.celery_app import app
 from .models import Work, Worker, Statistics, Workplace
 
 
-# @app.task
+@app.task
 def search_workers():
+    """added to DB new workers from typicode.com/users"""
+
     response = request('GET', 'https://jsonplaceholder.typicode.com/users')
 
     new_workers = [workers['name'] for workers in response.json()]
@@ -23,6 +27,8 @@ def search_workers():
 
 
 def get_work_time_on_workplace_in_range(workplace: Workplace, date_start: dt.date, date_end: dt.date):
+    """returns work time in hours for worker on workplace"""
+
     work_hours = 0
     for worktime in workplace.worker.worktime_set.all():
         if worktime.workplace == workplace:
@@ -32,12 +38,24 @@ def get_work_time_on_workplace_in_range(workplace: Workplace, date_start: dt.dat
     return work_hours
 
 
-# @app.task
-def fill():
-    log.warning('Task executed')
+@app.task
+def send_email_about_overworking(worker_id, work_id, hours):
+    """sends emails to managers with alert about worker overwork"""
+
+    worker = Worker.objects.get(pk=worker_id)
+    work = Work.objects.get(pk=work_id)
+    message = ('Wmanagment. Overwork', '%(worker)s works on %(work)s %(hours)s hours already' % {'worker': worker.name, 'work': work.name, 'hours': hours},
+               'wmanagment@company.com',
+               [manager.email for manager in work.company.manager_set.all()]
+               )
+
+    send_mass_mail(datatuple=(message,))
 
 
+@app.task
 def fill_statistics_for_workers():
+    """adds new data to statistics table about worker work times for week"""
+
     date_week_end = dt.datetime.combine(
         dt.date.today(), dt.datetime.min.time(), tzinfo=utc)
     date_week_start = date_week_end - dt.timedelta(days=7)
@@ -45,13 +63,10 @@ def fill_statistics_for_workers():
     works = Work.objects.all()
     for work in works:
         for workplace in work.workplace_set.all():
-            Statistics.objects.create(worker=workplace.worker, hour_per_week=get_work_time_on_workplace_in_range(workplace, date_week_start, date_week_end), workplace=workplace,
+            hour_per_week = get_work_time_on_workplace_in_range(
+                workplace, date_week_start, date_week_end)
+            Statistics.objects.create(worker=workplace.worker, hour_per_week=hour_per_week, workplace=workplace,
                                       date_week_start=date_week_start, date_week_end=date_week_end)
-
-
-def send_email():
-    msg = EmailMessage()
-    msg.set_content('Worker has worked over than limit')
-
-    with smtplib.SMTP('localhost') as s:
-        s.send_message(msg)
+            if hour_per_week > work.time_limit or True:
+                send_email_about_overworking.delay(
+                    workplace.worker.id, work.id, hour_per_week)
