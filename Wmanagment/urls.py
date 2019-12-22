@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('wmanagment/', include('worker_managment.urls',
                                 namespace='wmanagment')),
+    path('accounts/', include('wmanagment_auth.urls')),
 
 ]

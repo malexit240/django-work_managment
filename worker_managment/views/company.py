@@ -1,21 +1,31 @@
 """this module contains Company views"""
 
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import Group
 
 from worker_managment.models import Company
 import logging as log
 
 
-class CompanyList(ListView):
-    """renders list of companies"""
+class CompanyList(LoginRequiredMixin, ListView):
+    """renders list of companies
+
+    this view requires authenticated user
+    """
 
     template_name = 'worker_managment/companies.html'
     model = Company
     context_object_name = 'companies'
 
 
-class CompanyDetails(DetailView):
-    """renders list of works with aditional informaion"""
+class CompanyDetails(PermissionRequiredMixin, DetailView):
+    """renders list of works with aditional informaion
+
+    this view requires permission to view company
+    """
+
+    permission_required = ['worker_managment | company | Can view company']
 
     template_name = 'worker_managment/company_details.html'
     model = Company
