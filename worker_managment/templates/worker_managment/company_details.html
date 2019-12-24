@@ -1,10 +1,12 @@
 {% extends 'worker_managment/base.html' %}
+
+{% load i18n %}
 {% block title %} 
     {{ company.name }}
 {% endblock title %}
 {% block body %}
     <h1>{{company.name}}</h1>
-    <p><a href={% url 'wmanagment:managers-in-company' company.id %}>Managers</a></p>
+    <p><a href={% url 'wmanagment:managers-in-company' company.id %}> {% trans "Managers" %}</a></p>
     {% if works %}
         <ul class="list-group list-group-flush">
             {% for work in works %}
@@ -19,7 +21,7 @@
                                     {% if workplace.worker %}
                                         <a href={% url 'wmanagment:worker-details' workplace.worker_id %}> {{workplace.worker.name}}</a>
                                     {% else %}
-                                        Dont hire
+                                        {% trans "Dont hire" %}
                                     {% endif %}
                                 </p>
                             </span>
@@ -30,8 +32,8 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p> Works were not added</p>
+        <p> {% trans "Works were not added" %} </p>
     {% endif %}
     <br>
-    <p class='row justify-content-end'><a class='btn btn-info' href={% url 'wmanagment:works' company.id %}>Add work</a></p>
+    <p class='row justify-content-end'><a class='btn btn-info' href={% url 'wmanagment:works' company.id %}> {% trans "Add work" %} </a></p>
 {% endblock %}

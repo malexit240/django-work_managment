@@ -1,4 +1,5 @@
 {% extends 'worker_managment/base.html' %}
+{% load i18n %}
 
 {% block title %}
 {{work.name}}
@@ -15,11 +16,11 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p> Workplaces were not added</p>
+            <p> {% trans "Workplaces were not added"%} </p>
         {% endif %}
         <form method="post">
         {% csrf_token %}
-        {{form}}
+        {{form.as_p}}
         <input class='btn btn-info' type='submit'></input>
         </form>
 {% endblock body %}

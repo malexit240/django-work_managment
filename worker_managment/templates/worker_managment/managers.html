@@ -1,7 +1,9 @@
 {% extends 'worker_managment/base.html' %}
 
+{% load i18n %}
+
 {% block title %}
-Managers in {{company.name}}
+{% trans "Managers in" %} {{company.name}}
 {% endblock title %}
 
 {% block body %}
@@ -15,6 +17,6 @@ Managers in {{company.name}}
                 {% endfor %}
             </ul>
         {% else %}
-            <p> Managers were not added</p>
+            <p> {% trans "Managers were not added" %} </p>
         {% endif %}
 {% endblock body %}
