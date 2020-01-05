@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'worker_managment',
     'debug_toolbar',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +158,9 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}

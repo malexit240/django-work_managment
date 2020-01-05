@@ -16,15 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='API')
 
 
 urlpatterns = [
+    path('docs/', schema_view),
     path('admin/', admin.site.urls),
-]
+    path('api/', include('worker_managment.urls')),
 
-urlpatterns += i18n_patterns(path('wmanagment/', include('worker_managment.urls',
-                                                         namespace='wmanagment')))
+
+]
 
 if settings.DEBUG:
     import debug_toolbar

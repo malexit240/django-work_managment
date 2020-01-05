@@ -1,14 +1,14 @@
 """this module contains worker_managment app models"""
 
 from django.db import models as m
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 
 
 class NameAndStrMixin(m.Model):
     """Mixin that adds name field to model and overrides __str__ method
     to return name as result"""
 
-    name = m.CharField(max_length=64, verbose_name=_('name'))
+    name = m.CharField(max_length=64, verbose_name='name')
 
     def __str__(self):
         return self.name
@@ -36,13 +36,14 @@ class Company(NameAndStrMixin):
 class Manager(NameAndStrMixin):
     """Manager model"""
 
-    company = m.ForeignKey(Company, on_delete=m.CASCADE)
+    company = m.ForeignKey(Company, on_delete=m.CASCADE,
+                           related_name='managers')
 
 
 class Work(NameAndStrMixin):
     """Work model"""
 
-    company = m.ForeignKey(Company, on_delete=m.CASCADE)
+    company = m.ForeignKey(Company, related_name='works', on_delete=m.CASCADE)
 
 
 class Worker(NameAndStrMixin):
@@ -66,14 +67,14 @@ class Worker(NameAndStrMixin):
 class Workplace(NameAndStrMixin, StatusMixin):
     """Workplace model"""
 
-    work = m.ForeignKey(Work, on_delete=m.CASCADE)
+    work = m.ForeignKey(Work, on_delete=m.CASCADE, related_name='workplaces')
     worker = m.ForeignKey(Worker, on_delete=m.SET_NULL,
-                          null=True, default=None, blank=True)
+                          null=True, default=None, blank=True, related_name='workplaces')
 
-    STATUS = [(0, _('New')),
-              (1, _('Approved')),
-              (2, _('Cancelled')),
-              (3, _('Finished'))]
+    STATUS = [(0, ('New')),
+              (1, ('Approved')),
+              (2, ('Cancelled')),
+              (3, ('Finished'))]
 
     status = m.IntegerField(default=0,
                             choices=STATUS)
@@ -85,17 +86,17 @@ class WorkTime(m.Model, StatusMixin):
     class Meta:
         unique_together = (('worker', 'workplace'),)
 
-    date_start = m.DateTimeField(null=True, verbose_name=_(
+    date_start = m.DateTimeField(null=True, verbose_name=(
         'start date'), blank=True, default=None)
-    date_end = m.DateTimeField(null=True, verbose_name=_(
+    date_end = m.DateTimeField(null=True, verbose_name=(
         'end date'), blank=True, default=None)
 
-    STATUS = [(0, _('New')),
-              (1, _('Approved')),
-              (2, _('Cancelled'))]
+    STATUS = [(0, ('New')),
+              (1, ('Approved')),
+              (2, ('Cancelled'))]
 
     status = m.IntegerField(
-        default=0, verbose_name=_('status'), choices=STATUS)
+        default=0, verbose_name=('status'), choices=STATUS)
 
     worker = m.ForeignKey(Worker, on_delete=m.CASCADE)
     workplace = m.ForeignKey(Workplace, on_delete=m.SET_NULL, null=True)
