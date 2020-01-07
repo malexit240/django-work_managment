@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'worker_managment',
     'debug_toolbar',
+    'channels',
+    'channels_redis',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +157,14 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
+
+ASGI_APPLICATION = 'Wmanagment.routing.app'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels_redis.core.RedisChannelLayer",
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+    },
+}

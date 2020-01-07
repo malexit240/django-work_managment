@@ -5,6 +5,21 @@ Works in {{company.name}}
 {% endblock title %}
 
 {% block body %}
+
+    <div class="row alert alert-primary" id='alert-block' style='visibility:collapse' role="alert">
+        <p class='col-11' id='alert-info'></p>
+        <button class='btn btn-info col-1' onclick="document.location.reload(true);">reload</button>
+    </div>
+    <script>
+        const webSocket = new WebSocket('ws://localhost:8000{% url 'wmanagment:works' company.pk%}' );
+
+        webSocket.onmessage = event => {
+            document.getElementById('alert-block').style.visibility = "visible";
+            document.getElementById('alert-info').innerText = event.data;
+        };
+        
+    </script>
+
     <h1>{{company.name}}</h1>
         {% if works %}
             <ul class="list-group list-group-flush">
