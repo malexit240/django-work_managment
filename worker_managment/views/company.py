@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView
 
 from worker_managment.models import Company
 import logging as log
+import worker_managment.signal_handlers
 
 
 class CompanyList(ListView):

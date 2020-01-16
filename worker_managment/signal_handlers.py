@@ -7,6 +7,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from .models import Work
+from .consumers import get_string_without_slashes
 
 
 @receiver(post_save, sender=Work)
